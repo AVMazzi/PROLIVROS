@@ -1,0 +1,76 @@
+<hr>
+<h2>Livros</h2>
+<hr>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-1">
+      <label><b>Filtro:</b> </label>
+    </div>
+    <div class="col-2">
+       <input
+          type="text"
+          class="form-control mr-2"
+          placeholder="buscar"
+          [(ngModel)]="filterLivros"
+       >
+      </div>
+      <!-- <div class="col-2 col-m-6 col-lg-8">
+        <button class="btn btn-primary mb-2">Buscar</button>
+      </div> -->
+    </div>
+</div>
+<table class="table table-stripped">
+    <thead class="table-dark">
+      <tr>
+        <th>
+           <button type="button" class="btn btn-outline-light btn-sm"
+              (click)="showImage()">
+              <b>
+                {{showImg ? "Exibir Capa":"Ocultar Capa"}}
+              </b>
+            </button>
+        </th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Assunto</th>
+        <th>Editora</th>
+        <th>Edição</th>
+        <th>Ano da Publicação</th>
+        <th>Opções</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="livros && livros.length">
+      <tr *ngFor="let livro of livrosFiltrados">
+        <td>
+          <img [collapse]="showImg"
+          [isAnimated]="true"
+          src="/assets/{{livro.capa}}" alt=""
+          [style.width.px]="widthImg"
+          [style.margin.px]="marginImg"
+        >
+      </td>
+        <td>{{livro.titulo}}</td>
+        <td></td>
+        <td></td>
+        <td>{{livro.editora}}</td>
+        <td>{{livro.edicao}}</td>
+        <td>{{livro.anoPublicacao}}</td>
+        <td class="col-2">
+          <button type="button" class="btn btn-primary btn-sm "
+                  [style.margin-right.px] = "marginImg">
+            <b> Editar </b>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm">
+            <b> Excluir </b>
+          </button>
+        </td>
+      </tr>
+  </tbody>
+  <tfoot *ngIf="!livros" class="text-center">
+    <tr>
+      <td colspan="8">
+        <h4> No book found </h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>
