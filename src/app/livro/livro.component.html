@@ -25,9 +25,14 @@
         <th>
            <button type="button" class="btn btn-outline-light btn-sm"
               (click)="showImage()">
-              <b>
-                {{showImg ? "Exibir Capa":"Ocultar Capa"}}
-              </b>
+              <i  *ngIf="showImg">
+                <fa-icon [icon]="['far', 'eye']"></fa-icon>
+              </i>
+              <i  *ngIf="!showImg">
+                <fa-icon [icon]="['far', 'eye-slash']"></fa-icon>
+              </i>
+
+              {{showImg?"Exibir":"Ocultar"}}
             </button>
         </th>
         <th>Título</th>
@@ -56,15 +61,20 @@
         <td>{{livro.edicao}}</td>
         <td>{{livro.anoPublicacao}}</td>
         <td class="col-2">
-          <button type="button" class="btn btn-primary btn-sm "
+          <button type="button" class="btn btn-primary btn-sm"
                   [style.margin-right.px] = "marginImg">
-            <b> Editar </b>
+                  <fa-icon [icon]="['far', 'edit']" aria-hidden="true" title="Editar"
+                  style="cursor: grabbing;"></fa-icon>
           </button>
-          <button type="button" class="btn btn-danger btn-sm">
-            <b> Excluir </b>
+          <button type="button" class="btn btn-danger btn-sm" (click)="openModal(template)">
+            <fa-icon [icon]="['far', 'trash-alt']" aria-hidden="true" title="Excluir"
+            style="cursor: grabbing;"></fa-icon>
           </button>
         </td>
       </tr>
+      <a *ngIf="!livros">
+      <h4>No book founds</h4>
+      </a>
   </tbody>
   <tfoot *ngIf="!livros" class="text-center">
     <tr>
@@ -74,3 +84,10 @@
     </tr>
   </tfoot>
 </table>
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Tem certeza que que excluir este livro?</p>
+    <button type="button" class="btn btn-primary" (click)="confirm()"  [style.margin-right.px] = "marginImg">Yes</button>
+    <button type="button" class="btn btn-danger" (click)="decline()" >No</button>
+  </div>
+</ng-template>

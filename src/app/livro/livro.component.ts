@@ -1,7 +1,13 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+
 import { LivroService } from '../services/livro.service';
 import { Livro } from '../models/Livro';
+
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 
 @Component({
   selector: 'app-livro',
@@ -14,9 +20,10 @@ export class LivroComponent implements OnInit {
   public livrosFiltrados : Livro[] = [];
 
   apiUrl : any;
-  widthImg : number = 150;
+  widthImg : number = 125;
   marginImg : number = 2  ;
   showImg : boolean = true;
+  modalRef?: BsModalRef;
 
 
   private _filterLivros : string = '';
@@ -41,10 +48,18 @@ export class LivroComponent implements OnInit {
 
 
 
-    constructor(private livroService:LivroService) { }
+    constructor(private livroService:LivroService,
+      private modalService: BsModalService,
+      private toastr: ToastrService,
+      private spinner: NgxSpinnerService
+    ) { }
 
     public ngOnInit() {
-      this.getLivros();
+    this.spinner.show();
+    setTimeout(() => 5000);
+
+
+    this.getLivros();
   }
 
  public showImage(){
@@ -52,14 +67,34 @@ export class LivroComponent implements OnInit {
  }
 
   public getLivros() : void{
-    this.livroService.getLivros().subscribe(
-      (_livros: Livro[]) => {
+    this.livroService.getLivros().subscribe({
+      next:(_livros: Livro[]) => {
+        this.spinner.show();
         console.log("_livros - ", _livros);
         this.livros =_livros;
         this.livrosFiltrados = this.livros;
       },
-      error => console.log("Error - ", error)
-    );
-    console.log(this._filterLivros);
+      error: (error:any) => {
+        this.spinner.hide(),
+        this.toastr.error('Erro ao carregar', 'Erro!')
+      },
+      complete: () => this.spinner.hide()
+  });
   }
+
+  openModal(template: TemplateRef<void>) {
+    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
+  }
+
+  confirm(): void {
+    this.modalRef?.hide();
+    this.toastr.success('Excluído com sucesso!','Exclusão' );
+  }
+
+  decline(): void {
+    this.modalRef?.hide();
+    //this.toastr.console.error('Exclusão cancelada!','Exclusão');
+  }
+
+
 }

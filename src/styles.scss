@@ -8,3 +8,14 @@
 
 /* Importing Datepicker SCSS file. */
 @import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
+
+#toast-container > .toast-success {
+  background-image: none;
+  background-color: darkblue;
+  color: yellowgreen;
+}
+#toast-container > .toast-error{
+  background-image: none;
+  background-color: darkred;
+  color: greenyellow;
+}
